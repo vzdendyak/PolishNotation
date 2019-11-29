@@ -1,0 +1,6 @@
+D:\projects\lab 8.1\lab 8.1\obj\Debug\lab 8.1.csprojAssemblyReference.cache
+D:\projects\lab 8.1\lab 8.1\bin\Debug\lab 8.1.exe.config
+D:\projects\lab 8.1\lab 8.1\bin\Debug\lab 8.1.exe
+D:\projects\lab 8.1\lab 8.1\bin\Debug\lab 8.1.pdb
+D:\projects\lab 8.1\lab 8.1\obj\Debug\lab 8.1.exe
+D:\projects\lab 8.1\lab 8.1\obj\Debug\lab 8.1.pdb

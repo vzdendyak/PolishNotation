@@ -53,7 +53,7 @@ namespace lab_8._1
                     outputList.Add(s.Pop());
                 }
 
-                outputList.Reverse();
+               // outputList.Reverse();
             }
             catch (Exception)
             {
@@ -96,11 +96,8 @@ namespace lab_8._1
                         Console.Write("{0}", items[i]);
                         formula += items[i];
                     }
-                    for (int i = items.Count - 1; i >= 0; i--)
-                    {
-                        formulaReversed += items[i];
-                    }
-                    tree = new CTree(formula[0], formulaReversed);
+                   
+                    tree = new CTree(formula[0], formula);
                     EnterCommand();
                     break;
                 case "comp":

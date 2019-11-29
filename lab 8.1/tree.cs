@@ -14,7 +14,7 @@ namespace lab_8._1
         string fRev;
         CNode rootNode;
         char[] vars;
-        int[] varsValues;
+        Dictionary<int,double> varsValues;
         public  int varsNum { get; set; }
         double result;
         public CTree(char value,string f)
@@ -44,11 +44,19 @@ namespace lab_8._1
             for (int i = 0; i < infix.Length; i++)
             {
                 
-                if (double.TryParse(infix[i].ToString(), out double n) ) // DIGIT
+                if (double.TryParse(infix[i].ToString(), out double n)) // DIGIT
                 {
-                    s.Push(varsValues[j]);
-                    i += varsValues[j].ToString().Length-1;
-                    j++;
+                    if (varsValues.ContainsKey(i))
+                    {
+                        s.Push(varsValues[i]);
+                        i += varsValues[i].ToString().Length - 1;
+                        j++;
+                       
+                    }
+                   
+                   
+
+                   
                 }
                 else if (Program.isOperator(infix[i]))
                 {
@@ -85,7 +93,7 @@ namespace lab_8._1
         }
         public void inputValues(params int[] values)
         {
-            varsValues = new int[values.Length];
+            varsValues = new Dictionary<int, double>();
             if (values.Length!=varsNum)
             {
                 Console.WriteLine($"You entered less than {varsNum} variable!");
@@ -99,9 +107,10 @@ namespace lab_8._1
                     if (((int)str[i] >= 65 && (int)str[i] <= 90) || ((int)str[i] >= 97 && (int)str[i] <= 122)) // DIGIT
                     {
                         str.Replace(str[i].ToString(), values[j].ToString()) ;
+                        varsValues.Add(i, values[j]);
+
                         i += values[j].ToString().Length -1;
                         //   str[i] = char.Parse(values[j].ToString());
-                        varsValues[j] = values[j];
                         j++;
                         
                     }

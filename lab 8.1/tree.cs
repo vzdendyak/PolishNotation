@@ -40,14 +40,15 @@ namespace lab_8._1
         {
             string infix = fRev;
             Stack<double> s = new Stack<double>();
-            
+            int j = 0;
             for (int i = 0; i < infix.Length; i++)
             {
                 
                 if (double.TryParse(infix[i].ToString(), out double n) ) // DIGIT
                 {
-                   
-                    s.Push(double.Parse(infix[i].ToString()));
+                    s.Push(varsValues[j]);
+                    i += varsValues[j].ToString().Length-1;
+                    j++;
                 }
                 else if (Program.isOperator(infix[i]))
                 {
@@ -84,6 +85,7 @@ namespace lab_8._1
         }
         public void inputValues(params int[] values)
         {
+            varsValues = new int[values.Length];
             if (values.Length!=varsNum)
             {
                 Console.WriteLine($"You entered less than {varsNum} variable!");
@@ -92,11 +94,14 @@ namespace lab_8._1
                 StringBuilder str = new StringBuilder(fRev);
 
                 int j = 0;
-                for (int i = 0; i < fRev.Length; i++)
+                for (int i = 0; i < str.Length; i++)
                 {
-                    if (((int)fRev[i] >= 65 && (int)fRev[i] <= 90) || ((int)fRev[i] >= 97 && (int)fRev[i] <= 122)) // DIGIT
+                    if (((int)str[i] >= 65 && (int)str[i] <= 90) || ((int)str[i] >= 97 && (int)str[i] <= 122)) // DIGIT
                     {
-                        str[i] = char.Parse(values[j].ToString());
+                        str.Replace(str[i].ToString(), values[j].ToString()) ;
+                        i += values[j].ToString().Length -1;
+                        //   str[i] = char.Parse(values[j].ToString());
+                        varsValues[j] = values[j];
                         j++;
                         
                     }
@@ -105,9 +110,23 @@ namespace lab_8._1
             }
         }
 
-        public void Join()
+        public void printVars()
         {
-            rootNode.joine(char value, string f);
+            
+            for (int i = 0; i < vars.Length; i++)
+            {
+                if (Program.isConstant( vars[i]))
+                {
+                    Console.WriteLine($"{i+1} - {vars[i]}");
+                   
+                }
+                
+            }
+        }
+        public void Join(CTree temp)
+        {
+            rootNode.joine(temp.rootNode);
+            this.formula += temp.formula;
         }
     }
 
@@ -163,15 +182,15 @@ namespace lab_8._1
             
         }
 
-        public void joine()
+        public void joine(CNode temp)
         {
             if (RightChild == null)
             {
-                RightChild.Insert();
+                RightChild = temp;
             }
             else
             {
-                RightChild.joine();
+                RightChild.joine(temp);
             }
         }
     }

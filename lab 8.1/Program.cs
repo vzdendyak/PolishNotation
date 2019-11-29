@@ -70,6 +70,8 @@ namespace lab_8._1
         {
             Console.WriteLine("\nEnter Command...");
             string expression = Console.ReadLine();
+            List<char> items;
+            string formulaReversed;
             expression = Regex.Replace(expression, @"\s+", " ");
             if (expression.EndsWith(" "))
             {
@@ -81,13 +83,14 @@ namespace lab_8._1
             switch (firstWord)
             {
                 case "enter":
-                    List<char> items = ConvertToPref(expression);
+                    expression=expression.Remove(0, 5);
+                    items = ConvertToPref(expression);
                     if (items.Count == 0)
                     {
                         Console.ReadLine();
                         return;
                     }
-                    string formulaReversed = "";
+                     formulaReversed = "";
                     for (int i = 0; i < items.Count; i++)
                     {
                         Console.Write("{0}", items[i]);
@@ -98,6 +101,7 @@ namespace lab_8._1
                         formulaReversed += items[i];
                     }
                     tree = new CTree(formula[0], formulaReversed);
+                    EnterCommand();
                     break;
                 case "comp":
                     int[] val = new int[tree.varsNum];
@@ -109,8 +113,49 @@ namespace lab_8._1
                     }
                     tree.inputValues(val);
                     tree.calculate();
+                    EnterCommand();
+
+                    break;
+                case "vars":
+                    tree.printVars();
+                    EnterCommand();
+                    break;
+                case "join":
+                    string tempFormula = formula;
+                    formula = "";
+                    expression = expression.Remove(0, 4);
+                    items = ConvertToPref(expression);
+                    if (items.Count == 0)
+                    {
+                        Console.ReadLine();
+                        return;
+                    }
+                    formulaReversed = "";
+                    for (int i = 0; i < items.Count; i++)
+                    {
+                        Console.Write("{0}", items[i]);
+                        formula += items[i];
+                    }
+                    for (int i = items.Count - 1; i >= 0; i--)
+                    {
+                        formulaReversed += items[i];
+                    }
+
+                    treeJoin = new CTree(formula[0], formulaReversed);
+                    tree.Join(treeJoin);
+                    formula = tempFormula+formula;
+                    EnterCommand();
+                    break;
+                case "print":
+                    Console.WriteLine(formula);
+                    EnterCommand();
+                    break;
+                case "quit":
+                    return;
                     break;
                 default:
+                    EnterCommand();
+
                     break;
             }
             
@@ -119,36 +164,8 @@ namespace lab_8._1
         }
         static void Main()
         {
-            string expression = Console.ReadLine();
-            List<char>items= ConvertToPref(expression);
-            if (items.Count==0)
-            {
-                Console.ReadLine();
-                return;
-            }
-            string formulaReversed="";
-            for (int i = 0; i < items.Count; i++)
-            {
-                Console.Write("{0}", items[i]);
-                formula += items[i];
-            }
-            for (int i = items.Count-1; i >= 0; i--)
-            {
-                formulaReversed += items[i];
-            }
-            tree = new CTree(formula[0],formulaReversed);
 
-            int[] val= new int[tree.varsNum];
-
-            for (int i = 0; i < val.Length; i++)
-            {
-                Console.WriteLine($"\nEnter var {i}");
-                val[i] = int.Parse(Console.ReadLine());
-            }
-            tree.inputValues(val);
-            
-            tree.calculate();
-
+            EnterCommand();
             Console.ReadLine();
             
         }

@@ -77,7 +77,7 @@ namespace lab_8._1
            return fRev.IndexOf(digit);
 
         }
-        public void calculate()
+        public double calculate()
         {
             string infix = fRev;
             Stack<double> s = new Stack<double>();
@@ -130,8 +130,8 @@ namespace lab_8._1
                 }
             }
             result = s.Pop();
-            Console.WriteLine($"\nRES: {result}");
-            return;
+            fRev = formula;
+            return result;
         }
         public void inputValues(params int[] values)
         {

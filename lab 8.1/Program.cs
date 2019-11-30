@@ -8,6 +8,7 @@ namespace lab_8._1
 {
    internal class Program
     {
+        static public string expression;
         static public string formula;
         static CTree tree,treeJoin;
         static List<char> ConvertToPref(string exp)
@@ -69,10 +70,11 @@ namespace lab_8._1
         static void EnterCommand()
         {
             Console.WriteLine("\nEnter Command...");
-            string expression = Console.ReadLine();
+             expression = Console.ReadLine();
             List<char> items;
             string formulaReversed;
             expression = Regex.Replace(expression, @"\s+", " ");
+
             if (expression.EndsWith(" "))
             {
                 expression = expression.Remove(expression.Length - 1);
@@ -83,7 +85,9 @@ namespace lab_8._1
             switch (firstWord)
             {
                 case "enter":
-                    expression=expression.Remove(0, 5);
+                    expression=expression.Remove(0, 6);
+                    expression = expression.Replace(" ", "");
+
                     items = ConvertToPref(expression);
                     if (items.Count == 0)
                     {

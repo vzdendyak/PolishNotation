@@ -10,32 +10,73 @@ namespace lab_8._1
 
     class CTree
     {
+        string fOrig = Program.expression+" ";
         string formula = Program.formula;
         string fRev;
         CNode rootNode;
         char[] vars;
+        Dictionary<int, double> constants;
         Dictionary<int,double> varsValues;
         public  int varsNum { get; set; }
         double result;
         public CTree(char value,string f)
         {
+            constants = new Dictionary<int, double>();
             vars = new char[f.Length];
             fRev = f;
             rootNode = new CNode();
             rootNode.Insert(value,0,0,rootNode);
             int j = 0;
-            for (int i = 0; i < fRev.Length; i++)
+            string const1="";
+            for (int i = 0; i < fOrig.Length; i++)
             {
                 
-                if (((int)fRev[i] >= 65 && (int)fRev[i] <= 90) || ((int)fRev[i] >= 97 && (int)fRev[i] <= 122)) // DIGIT
+                if (((int)fOrig[i] >= 65 && (int)fOrig[i] <= 90) || ((int)fOrig[i] >= 97 && (int)fOrig[i] <= 122)) // DIGIT
                 {
                     varsNum++;
-                    vars[j] = fRev[i];
+                    vars[j] = fOrig[i];
                     j++;
+                    continue;
+                }
+
+                if (int.TryParse(fOrig[i].ToString(),out int n))
+                {
+                    int j1 = i;
+                    try
+                    {
+                        while (!Program.isOperator(fOrig[i]) && (fOrig[i] != ' '))
+                        {
+                            if (int.TryParse(fOrig[i].ToString(),out int N))
+                            {
+                                const1 += fOrig[i];
+                                i++;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                            
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        break;
+                    }
+                    //enter (a+b+(c*d))/(10*5)
+                    i = j1+const1.Length-1;
+                    position(const1);
+                    constants.Add(position(const1), double.Parse(const1));
+                    const1 = "";
+
                 }
             }
         }
 
+        public int position(string digit) {
+           return fRev.IndexOf(digit);
+
+        }
         public void calculate()
         {
             string infix = fRev;
@@ -46,11 +87,12 @@ namespace lab_8._1
                 
                 if (double.TryParse(infix[i].ToString(), out double n)) // DIGIT
                 {
-                    if (varsValues.ContainsKey(i))
+                    if (varsValues.ContainsKey(i) || constants.ContainsKey(i))
                     {
                         s.Push(varsValues[i]);
                         i += varsValues[i].ToString().Length - 1;
                         j++;
+
                        
                     }
                    
@@ -102,6 +144,7 @@ namespace lab_8._1
                 StringBuilder str = new StringBuilder(fRev);
 
                 int j = 0;
+                int numAdds = 0;
                 for (int i = 0; i < str.Length; i++)
                 {
                     if (((int)str[i] >= 65 && (int)str[i] <= 90) || ((int)str[i] >= 97 && (int)str[i] <= 122)) // DIGIT
@@ -110,8 +153,31 @@ namespace lab_8._1
                         varsValues.Add(i, values[j]);
 
                         i += values[j].ToString().Length -1;
+                        numAdds+= values[j].ToString().Length - 1;
                         //   str[i] = char.Parse(values[j].ToString());
                         j++;
+                    }
+                    else if (int.TryParse(str[i].ToString(), out int n))
+                    {
+                        string const1="";
+                        int j1 = i;
+                        int k = 0;
+                        while (!Program.isOperator(str[i]) && constants.ContainsKey(i-numAdds-k))
+                        {
+                            const1 += str[i];
+                            if (const1.Length == constants[i - numAdds-k].ToString().Length)
+                            {
+                                break;
+                            }
+                            k++;
+
+                            i++;
+                           
+                        }
+                        if (constants.ContainsValue(double.Parse(const1)))
+                        {
+                            varsValues.Add(j1, double.Parse(const1));
+                        }
                         
                     }
                 }

@@ -192,7 +192,9 @@ namespace lab_8._1
             {
                 if (Program.isConstant( vars[i]))
                 {
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"{i+1} - {vars[i]}");
+                    Console.ResetColor();
                    
                 }
                 

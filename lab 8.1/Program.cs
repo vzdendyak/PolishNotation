@@ -151,11 +151,18 @@ namespace lab_8._1
                         EnterCommand();
                         break;
                     case "print":
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine(formula);
+                        Console.ResetColor();
+
                         EnterCommand();
                         break;
                     case "quit":
-                        return;
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("Good-bye!");
+                        Console.ResetColor();
+                        break;
                     case "\\help":
                         commandList();
                         EnterCommand();
@@ -167,8 +174,6 @@ namespace lab_8._1
                     default:
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Unknown command! Try again.");
-
-
                         Console.ResetColor();
                         EnterCommand();
                         break;
@@ -219,13 +224,15 @@ namespace lab_8._1
                     val[i] = 1;
                     continue;
                 }
-                Console.WriteLine($"\nEnter var {i}");
+                Console.WriteLine($"\nEnter var {i+1}");
                 val[i] = int.Parse(Console.ReadLine());
             }
             tree.inputValues(val);
             if (state==0)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"\nResult: {tree.calculate()}");
+                Console.ResetColor();
                 EnterCommand();
 
             }
@@ -264,7 +271,7 @@ namespace lab_8._1
         }
         public static bool isValid(char? c)
         {
-            return !(int.TryParse(c.ToString(), out int n) || ((int)c >= 65 && (int)c <= 90) || ((int)c >= 97 && (int)c <= 122) || isOperator(c));
+            return !(int.TryParse(c.ToString(), out int n) || ((int)c >= 65 && (int)c <= 90) || ((int)c >= 97 && (int)c <= 122) || isOperator(c) || c==')' || c=='(');
         }
         public static bool isConstant(char c)
         {
